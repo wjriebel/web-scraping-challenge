@@ -13,14 +13,14 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def index():
-    mars = list(mongo.db.mars_collection.find())
+    mars = mongo.db.mars_collection.find_one()
     return render_template("index.html", jinja_list=mars)
 
 
 @app.route("/scrape")
 def scraper():
     mars = mongo.db.mars_collection
-    mars_data = scrape_mars.scrape()
+    mars_data = scrape_mars.scrape_all()
     mars.update({}, mars_data, upsert=True)
     return redirect("/", code=302)
 
